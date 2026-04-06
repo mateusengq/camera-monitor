@@ -135,10 +135,13 @@ def compute_classification(
 
         # ------------------------------------------------------------------
         # Write to dataframe
+        # String columns must be initialised with explicit object dtype —
+        # pandas 2.x infers None as float64 which rejects string assignment.
         # ------------------------------------------------------------------
-        result[f"{cam}_status"]       = np.nan
-        result[f"{cam}_signal_type"]  = np.nan
-        result[f"{cam}_week_pct_str"] = np.nan
+        n = len(result)
+        result[f"{cam}_status"]       = pd.array([None] * n, dtype=object)
+        result[f"{cam}_signal_type"]  = pd.array([None] * n, dtype=object)
+        result[f"{cam}_week_pct_str"] = pd.array([None] * n, dtype=object)
 
         result.loc[mask_week, f"{cam}_status"]       = status
         result.loc[mask_week, f"{cam}_signal_type"]  = signal_type
